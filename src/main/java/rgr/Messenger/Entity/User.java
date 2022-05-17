@@ -25,6 +25,11 @@ public class User implements UserDetails {
     private String activationCode;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+    public User() {
+        this.username = "username";
+        this.email = "email";
+        this.password = "password";
+    }
 
     public User(String username, String email, String password, String activationCode, Role r) {
         this.username = username;
