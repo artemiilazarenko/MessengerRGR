@@ -15,7 +15,8 @@ public class Dialog {
     @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @OrderBy("date")
     private final Set<Message> messages;
 
     public Dialog() {
@@ -36,6 +37,15 @@ public class Dialog {
     public void addMessage(Message m) {
         this.messages.add(m);
     }
+
+
+    public void removeMessage(Message m) {
+        if(!this.messages.contains(m)) {
+            return;
+        }
+        this.messages.remove(m);
+    }
+
 
     public Set<User> getUsers() {
         return users;
