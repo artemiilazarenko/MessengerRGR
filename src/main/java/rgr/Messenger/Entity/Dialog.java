@@ -63,8 +63,10 @@ public class Dialog {
         if(!this.users.contains(u)) {
             return;
         }
-        u.removeMembershipDialogs(this);
+
         this.users.remove(u);
+        u.removeMembershipDialogs(this);
+
     }
 
     public Long getId() {

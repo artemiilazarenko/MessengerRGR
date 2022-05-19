@@ -34,21 +34,23 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails u = userRepository.findByUsername(username);
-        if(u == null) {
+        Optional<User> u = userRepository.findByUsername(username);
+        if(u.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь не найден");
         } else {
-            return u;
+            return u.get();
+
         }
 
     }
 
     public boolean isUserRegistered(String username) {
-        return userRepository.findByUsername(username) != null;
+        return userRepository.findByUsername(username).isPresent();
+
     }
 
     public boolean isUsernameFree(String username) {
-        return userRepository.findByUsername(username) == null;
+        return userRepository.findByUsername(username).isEmpty();
     }
 
     public boolean isEmailFree(String email) {
@@ -94,15 +96,19 @@ public class UserService implements UserDetailsService {
     }
 
     public User findUserByUsername(String username) {
-        return (User)userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).orElse(null);
+
     }
 
     public void addRole(String username, String name) {
-        User user = (User) userRepository.findByUsername(username);
+       // User user = (User) userRepository.findByUsername(username);
+
+        Optional<User> user = userRepository.findByUsername(username);
         Role r = roleRepository.findByName(name);
-        if(user != null && r != null) {
-            user.addRole(r);
-            userRepository.save(user);
+        if(user.isPresent() && r != null) {
+            User u = user.get();
+            u.addRole(r);
+            userRepository.save(u);
         }
     }
 
