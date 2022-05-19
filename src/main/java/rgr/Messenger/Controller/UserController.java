@@ -26,7 +26,7 @@ public class UserController {
         if(username != null && email != null && password != null) {
             if(userService.registerUser(username, email, password)) {
                 model.addAttribute("message", "Вы успешно зарегистрировались! Для продолжения активируйте учетную запись с помощью ссылки, отправленной на вашу почту.");
-                return "login";
+                return "redirect:/login";
             } else {
                 return "register";
             }
@@ -42,7 +42,7 @@ public class UserController {
         } else {
             model.addAttribute("message", "Код активации не найден");
         }
-        return "login";
+        return "redirect:/login";
     }
 
 }
