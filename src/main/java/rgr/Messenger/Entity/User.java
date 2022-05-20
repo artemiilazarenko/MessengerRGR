@@ -18,6 +18,9 @@ public class User implements UserDetails {
     private Long id;
     @Size(min = 4, max = 20)
     private final String username;
+    private String firstName;
+    private String lastName;
+
     @Email
     private final String email;
     @Size(min = 8, max = 32)
@@ -45,9 +48,11 @@ public class User implements UserDetails {
         this.password = "password";
     }
 
-    public User(String username, String email, String password, String activationCode, Role r) {
+    public User(String username, String email, String firstName, String lastName, String password, String activationCode, Role r) {
         this.username = username;
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
         this.isActivated = false;
         this.activationCode = activationCode;
@@ -245,6 +250,22 @@ public class User implements UserDetails {
         }
         this.outFriendRequests.remove(u);
         u.removeInFriendRequests(this);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
 }

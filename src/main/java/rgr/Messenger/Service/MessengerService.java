@@ -11,6 +11,7 @@ import rgr.Messenger.Repository.UserRepository;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.HashSet;
 
 @Service
 public class MessengerService {
@@ -23,17 +24,27 @@ public class MessengerService {
     private UserRepository ur;
 
 
-    public void createDialog(User u, Long id) {
+    public Dialog createDialog(User u, Long id) {
         Optional<User> secondUser = ur.findById(id);
         if(secondUser.isPresent()) {
             Dialog d = new Dialog(u);
             d.addUser(u);
             d.addUser(secondUser.get());
             dr.save(d);
+            return d;
+
         }
+        return null;
     }
-    public Dialog getDialog(Long id) {
-        return dr.findById(id).orElse(null);
+    public Optional<Dialog> getDialog(User u, Long id) {
+        Optional<User> user = ur.findById(id);
+        if(user.isPresent()) {
+            Set<User> s = new HashSet<>();
+            s.add(u);
+            s.add(user.get());
+            return dr.findByUsersIn(s);
+        }
+        return dr.findById(id);
     }
     public void leaveDialog(User u, Long id) {
         Optional<Dialog> d = dr.findById(id);
@@ -64,14 +75,14 @@ public class MessengerService {
         Optional<Dialog> d = dr.findByCreatorAndId(u, Long.parseLong(id));
         if(d.isPresent()) {
             Dialog dialog = d.get();
-            for(User user : dialog.getUsers()) {
-                user.removeMembershipDialogs(dialog);
-            }
+
             dialog.getCreator().removeCreatedDialogs(dialog);
             for(Message m : dialog.getMessages()) {
-                dialog.removeMessage(m);
+
                 mr.delete(m);
             }
+            dialog.clearMessages();
+            dr.save(dialog);
             dr.delete(dialog);
             return true;
         } else {

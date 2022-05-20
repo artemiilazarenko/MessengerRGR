@@ -17,7 +17,7 @@ public class Dialog {
 
     @OneToMany(fetch = FetchType.EAGER)
     @OrderBy("date")
-    private final Set<Message> messages;
+    private  Set<Message> messages;
 
     public Dialog() {
         this.users = new HashSet<>();
@@ -46,6 +46,10 @@ public class Dialog {
         this.messages.remove(m);
     }
 
+
+    public void clearMessages() {
+        this.messages.clear();
+    }
 
     public Set<User> getUsers() {
         return users;
