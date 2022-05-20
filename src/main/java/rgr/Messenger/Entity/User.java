@@ -199,8 +199,24 @@ public class User implements UserDetails {
         u.addFriend(this);
     }
 
+    public void removeFriend(User u) {
+        if(!this.friends.contains(u)) {
+            return;
+        }
+        this.friends.remove(u);
+        u.removeFriend(this);
+    }
+
     public Set<User> getInFriendRequests() {
         return inFriendRequests;
+    }
+
+    public void removeInFriendRequests(User u) {
+        if(!this.inFriendRequests.contains(u)) {
+            return;
+        }
+        this.inFriendRequests.remove(u);
+        u.removeOutFriendRequests(this);
     }
 
     public void addInFriendRequests(User u) {
@@ -215,12 +231,20 @@ public class User implements UserDetails {
         return outFriendRequests;
     }
 
-    private void addOutFriendRequests(User u) {
+    public void addOutFriendRequests(User u) {
         if(this.outFriendRequests.contains(u)) {
             return;
         }
         this.outFriendRequests.add(u);
         u.addInFriendRequests(this);
+    }
+
+    public void removeOutFriendRequests(User u) {
+        if(!this.outFriendRequests.contains(u)) {
+            return;
+        }
+        this.outFriendRequests.remove(u);
+        u.removeInFriendRequests(this);
     }
 
 }

@@ -52,16 +52,4 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("/friends")
-    public String friends(@AuthenticationPrincipal User u) {
-        return "friends";
-    }
-
-    @PostMapping("/friends/sendFriendRequest")
-    public String addFriend(@AuthenticationPrincipal User u, @RequestParam String username) {
-        userService.sendFriendRequest(u, username);
-        return "redirect:/friends";
-    }
-
-
 }
