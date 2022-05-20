@@ -30,6 +30,14 @@ public class User implements UserDetails {
     private Set<Dialog> createdDialogs;
     @ManyToMany(fetch=FetchType.EAGER, mappedBy = "users", cascade = CascadeType.MERGE)
     private Set<Dialog> dialogs;
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<User> inFriendRequests;
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<User> outFriendRequests;
+    @ManyToMany(fetch=FetchType.EAGER)
+    private Set<User> friends;
+
+
 
     public User() {
         this.username = "username";
@@ -47,6 +55,10 @@ public class User implements UserDetails {
         this.roles.add(r);
         this.createdDialogs = new HashSet<>();
         this.dialogs  = new HashSet<>();
+        this.inFriendRequests = new HashSet<>();
+        this.outFriendRequests = new HashSet<>();
+        this.friends = new HashSet<>();
+
     }
 
     @Override
@@ -173,5 +185,42 @@ public class User implements UserDetails {
         }
         this.dialogs.remove(d);
         d.removeUser(this);
+
     }
+    public Set<User> getFriends() {
+        return friends;
+    }
+
+    public void addFriend(User u) {
+        if(this.friends.contains(u)) {
+            return;
+        }
+        this.friends.add(u);
+        u.addFriend(this);
+    }
+
+    public Set<User> getInFriendRequests() {
+        return inFriendRequests;
+    }
+
+    public void addInFriendRequests(User u) {
+        if(this.inFriendRequests.contains(u)) {
+            return;
+        }
+        this.inFriendRequests.add(u);
+        u.addOutFriendRequests(this);
+    }
+
+    public Set<User> getOutFriendRequests() {
+        return outFriendRequests;
+    }
+
+    private void addOutFriendRequests(User u) {
+        if(this.outFriendRequests.contains(u)) {
+            return;
+        }
+        this.outFriendRequests.add(u);
+        u.addInFriendRequests(this);
+    }
+
 }

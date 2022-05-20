@@ -1,6 +1,7 @@
 package rgr.Messenger.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import rgr.Messenger.Service.UserService;
+import rgr.Messenger.Entity.User;
 
 @Controller
 public class UserController {
@@ -44,5 +46,22 @@ public class UserController {
         }
         return "redirect:/login";
     }
+
+    @GetMapping("/profile")
+    public String profile(@AuthenticationPrincipal User u) {
+        return "profile";
+    }
+
+    @GetMapping("/friends")
+    public String friends(@AuthenticationPrincipal User u) {
+        return "friends";
+    }
+
+    @PostMapping("/friends/sendFriendRequest")
+    public String addFriend(@AuthenticationPrincipal User u, @RequestParam String username) {
+        userService.sendFriendRequest(u, username);
+        return "redirect:/friends";
+    }
+
 
 }
