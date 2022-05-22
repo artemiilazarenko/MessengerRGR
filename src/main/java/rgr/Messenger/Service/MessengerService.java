@@ -24,31 +24,35 @@ public class MessengerService {
     private UserRepository ur;
 
 
-    public Dialog createDialog(User u, Long id) {
+    private Dialog createDialog(User u, Long id) {
         Optional<User> secondUser = ur.findById(id);
-        if(secondUser.isPresent()) {
+        if (secondUser.isPresent()) {
             Dialog d = new Dialog(u);
             d.addUser(u);
             d.addUser(secondUser.get());
+            d.setSecondUser(secondUser.get());
             dr.save(d);
             return d;
 
         }
         return null;
     }
-    public Optional<Dialog> getDialog(User u, Long id) {
+
+    public Dialog getDialog(User u, Long id) {
         Optional<User> user = ur.findById(id);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             Set<User> s = new HashSet<>();
             s.add(u);
             s.add(user.get());
-            return dr.findByUsersIn(s);
+            return dr.findByUsersIn(s).orElseGet(() -> createDialog(u, id));
+
         }
-        return dr.findById(id);
+        return null;
     }
+
     public void leaveDialog(User u, Long id) {
         Optional<Dialog> d = dr.findById(id);
-        if(d.isPresent()) {
+        if (d.isPresent()) {
             Dialog dialog = d.get();
             dialog.removeUser(u);
             dr.save(dialog);
@@ -58,9 +62,9 @@ public class MessengerService {
     public void addUserToDialog(User user, String username, Long did) {
         Optional<User> u = ur.findByUsername(username);
         Optional<Dialog> d = dr.findById(did);
-        if(u.isPresent() && d.isPresent()) {
+        if (u.isPresent() && d.isPresent()) {
             Dialog dialog = d.get();
-            if(dialog.getUsers().contains(user)) {
+            if (dialog.getUsers().contains(user)) {
                 dialog.addUser(u.get());
                 dr.save(d.get());
             }
@@ -68,16 +72,13 @@ public class MessengerService {
     }
 
 
-
-
-
     public boolean removeDialog(User u, String id) {
         Optional<Dialog> d = dr.findByCreatorAndId(u, Long.parseLong(id));
-        if(d.isPresent()) {
+        if (d.isPresent()) {
             Dialog dialog = d.get();
 
             dialog.getCreator().removeCreatedDialogs(dialog);
-            for(Message m : dialog.getMessages()) {
+            for (Message m : dialog.getMessages()) {
 
                 mr.delete(m);
             }
@@ -101,12 +102,18 @@ public class MessengerService {
 
     public void sendMessage(User u, Long id, String message) {
         Optional<Dialog> d = dr.findById(id);
-        if(d.isPresent()) {
+        if (d.isPresent()) {
             Dialog dialog = d.get();
-            if(dialog.getUsers().contains(u)) {
+            if (dialog.getUsers().contains(u)) {
                 Message m = new Message(u, dialog, message);
                 dialog.addMessage(m);
                 mr.save(m);
             }
         }
+    }
+
+    public Set<Dialog> getAllRooms() {
+        return mr.findAllByIsRoom(true);
+    }
+
 }
