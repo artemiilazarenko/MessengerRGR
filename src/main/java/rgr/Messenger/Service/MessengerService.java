@@ -113,7 +113,7 @@ public class MessengerService {
     }
 
     public Set<Dialog> getAllRooms() {
-        return mr.findAllByIsRoom(true);
+        return dr.findAllByIsRoom(true);
     }
 
 }
