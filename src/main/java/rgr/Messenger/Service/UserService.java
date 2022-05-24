@@ -147,58 +147,71 @@ public class UserService implements UserDetailsService {
 
     public void removeFriend(User u, Long id) {
         Optional<User> opt = us.findById(id);
-        if(opt.isPresent()) {
+        if (opt.isPresent()) {
             User user = opt.get();
             u.removeFriend(user);
             us.save(user);
             us.save(u);
+        }
     }
 
-
-    public void sendFriendRequest(User u, String username) {
+        public void sendFriendRequest (User u, String username){
             Optional<User> opt = us.findByUsername(username);
-            if(opt.isPresent()) {
+            if (opt.isPresent()) {
                 User user = opt.get();
-                if(u.getInFriendRequests().contains(user)) {
+                if (u.getInFriendRequests().contains(user)) {
                     u.removeInFriendRequests(user);
                     u.addFriend(user);
                 } else {
                     u.addOutFriendRequests(user);
                 }
                 us.save(user);
-            us.save(u);
+                us.save(u);
+            }
+
         }
 
-    }
-
-    public void removeFriendRequest(User u, Long id) {
+        public void removeFriendRequest (User u, Long id){
             Optional<User> opt = us.findById(id);
-            if(opt.isPresent()) {
+            if (opt.isPresent()) {
                 User user = opt.get();
                 u.removeOutFriendRequests(user);
                 us.save(user);
                 us.save(u);
             }
-    }
+        }
 
-    public void acceptFriendRequest(User u, Long id) {
+        public void acceptFriendRequest (User u, Long id){
             Optional<User> opt = us.findById(id);
-            if(opt.isPresent()) {
+            if (opt.isPresent()) {
                 User user = opt.get();
                 u.removeInFriendRequests(user);
                 u.addFriend(user);
                 us.save(user);
-            us.save(u);
+                us.save(u);
+            }
         }
-    }
 
-    public void declineFriendRequest(User u, Long id) {
+        public void declineFriendRequest (User u, Long id){
             Optional<User> opt = us.findById(id);
-            if(opt.isPresent()) {
+            if (opt.isPresent()) {
                 User user = opt.get();
                 u.removeInFriendRequests(user);
                 us.save(user);
                 us.save(u);
+            }
+
+
+        }
+
+    public void changeFirstName(User u, String firstName) {
+        u.setFirstName(firstName);
+        us.save(u);
+    }
+
+    public void changeLastName(User u, String lastName) {
+        u.setLastName(lastName);
+        us.save(u);
     }
 
 }
