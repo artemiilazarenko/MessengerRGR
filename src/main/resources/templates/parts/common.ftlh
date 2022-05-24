@@ -53,7 +53,8 @@
             </#if>
                 <div id="content">
                 			<#nested>
-                		</div>
+                </div>
+                <script src="/script.js"></script>
 	</body>
 </html>
 </#macro>
