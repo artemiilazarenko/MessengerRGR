@@ -10,8 +10,9 @@ import rgr.Messenger.Entity.User;
 import rgr.Messenger.Service.MessengerService;
 import rgr.Messenger.Service.UserService;
 import rgr.Messenger.Entity.Dialog;
+import rgr.Messenger.Entity.Message;
 
-import java.util.Optional;
+import java.util.Map;
 
 
 

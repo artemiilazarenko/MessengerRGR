@@ -1,7 +1,8 @@
 package rgr.Messenger.Entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 import javax.validation.constraints.Email;
 
 @Entity
+@JsonIgnoreProperties({ "password", "email", "isActivated", "activationCode", "dialogs", "roles", "createdDialogs", "inFriendRequests", "outFriendRequests", "friends" })
 public class User implements UserDetails {
 
     @Id
