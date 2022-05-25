@@ -15,7 +15,7 @@ public class Dialog {
     @ManyToOne
     private User secondUser;
     @OneToMany(fetch = FetchType.EAGER)
-    @OrderBy("date DESC")
+    @OrderBy("date ASC")
     private  Set<Message> messages;
     @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<User> users;
