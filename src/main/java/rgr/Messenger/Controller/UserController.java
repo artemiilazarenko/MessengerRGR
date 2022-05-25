@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password, RedirectAttributes ra, Model m) {
         if(!username.isEmpty() && !email.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !password.isEmpty()) {
-            if (userService.registerUser(username, firstName, lastName, email, password)) {
+            if(userService.registerUser(username, firstName, lastName, email, password)) {
 
                 ra.addFlashAttribute("message", "Вы успешно зарегистрировались! Для продолжения активируйте учетную запись с помощью ссылки, отправленной на вашу почту.");
                 return "redirect:/login";
