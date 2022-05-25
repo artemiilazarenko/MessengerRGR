@@ -174,7 +174,7 @@ public class User implements UserDetails {
         this.createdDialogs.remove(d);
     }
 
-    public Set<Dialog> () getDialogs{
+    public Set<Dialog> getDialogs (){
         return dialogs;
     }
 
