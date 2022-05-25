@@ -3,13 +3,17 @@ package rgr.Messenger.Configuration;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
+
 
 @Configuration
 public class MVCConfiguration implements WebMvcConfigurer {
@@ -19,14 +23,11 @@ public class MVCConfiguration implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
     }
 
-    @Bean(name = "localeResolver")
-    public LocaleResolver getLocaleResolver()  {
-        CookieLocaleResolver resolver= new CookieLocaleResolver();
-        resolver.setCookieDomain("myAppLocaleCookie");
-        // 60 minutes
-        resolver.setCookieMaxAge(60*60);
-        return resolver;
-    }
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+        localeResolver.setDefaultLocale(new Locale("en", "US"));
+        return  localeResolver;}
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
@@ -34,11 +35,17 @@ public class MVCConfiguration implements WebMvcConfigurer {
         lci.setParamName("lang");
         return lci;
     }
-    @Override
+    @Bean
+    public MessageSource messageSource() {
+            ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+            messageSource.setBasename("lang/messages");
+            messageSource.setDefaultEncoding("UTF-8");
+            return messageSource;
+    }
+
+        @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        LocaleChangeInterceptor localeInterceptor = new LocaleChangeInterceptor();
-        localeInterceptor.setParamName("lang");
-        registry.addInterceptor(localeInterceptor).addPathPatterns("/*");
+            registry.addInterceptor(localeChangeInterceptor());
     }
 
 }

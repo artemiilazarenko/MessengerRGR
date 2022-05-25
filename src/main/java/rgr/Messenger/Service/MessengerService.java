@@ -101,11 +101,16 @@ public class MessengerService {
         return dr.findAllByUsers(u);
     }
 
-    public Map<String, Message> getMessagesOfDialog(Long id) {
+    public Map<String, Message> getMessagesOfDialog(User u, Long id) {
         Optional<Dialog> d = dr.findById(id);
-        Map<String, Message> map = new HashMap<>();
-        d.ifPresent(dialog -> dialog.getMessages().forEach(el -> map.put(String.valueOf(el.getId()), el)));
-        return map;
+        if(d.isPresent()) {
+            if(d.get().getUsers().contains(u)) {
+                Map<String, Message> map = new HashMap<>();
+                d.get().getMessages().forEach(el -> map.put(String.valueOf(el.getId()), el));
+                return map;
+            }
+        }
+        return null;
     }
 
     public void sendMessage(User u, Long id, String message) {
@@ -119,9 +124,26 @@ public class MessengerService {
             }
         }
     }
+    public void createRoom(User u, String title) {
+        Dialog d = new Dialog(u);
+        d.setRoom(true);
+        d.addUser(u);
+        d.setTitle(title);
+        dr.save(d);
+    }
+
 
     public Set<Dialog> getAllRooms() {
         return dr.findAllByIsRoom(true);
     }
+
+    public Set<Dialog> getRoomsOfUser(User u) {
+        return dr.findAllByIsRoomAndUsers(true, u);
+    }
+
+    public Dialog getRoom(Long id) {
+        return dr.findById(id).orElseGet(null);
+    }
+
 
 }
