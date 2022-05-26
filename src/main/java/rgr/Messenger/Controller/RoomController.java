@@ -37,6 +37,12 @@ public class RoomController {
         return "redirect:/rooms";
     }
 
+    @PostMapping("/invite/{id}")
+    public String inviteUser(@AuthenticationPrincipal User u,  @PathVariable Long id, @RequestParam String username) {
+        ms.addUserToDialog(u, username, id);
+        return "redirect:/rooms/" + id;
+    }
+
     @PostMapping("/setClose/{id}")
     public String setClosed(@AuthenticationPrincipal User u,  @PathVariable Long id, @RequestParam String isClosed) {
         ms.setRoomClosed(u, id, isClosed);
