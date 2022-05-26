@@ -147,6 +147,7 @@ justify-content: space-between;
     display: flex;
     flex-direction: column-reverse;
     margin-bottom: 30pt;
+    min-height: 140pt;
 }
 
 #messages_div_form {
