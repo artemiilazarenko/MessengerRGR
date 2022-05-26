@@ -5,7 +5,7 @@ body {
 }
 
 header {
-    background: yellowgreen;
+    background: #5d52ec;
 }
 
 ul {
@@ -30,7 +30,7 @@ a:visited {
 }
 
 a:hover {
-    background: #7ea728;
+    background: #c3bfef;
 }
 
 h3, h1 {
