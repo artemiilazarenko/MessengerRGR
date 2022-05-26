@@ -13,4 +13,5 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
     Optional<Dialog> findByUsersIn(Set<User> users);
     Set<Dialog> findAllByIsRoom(boolean b);
     Set<Dialog> findAllByIsRoomAndUsers(boolean b, User u);
+    Set<Dialog> findAllByIsRoomAndIsClosed(boolean b, boolean b1);
 }

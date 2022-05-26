@@ -2,6 +2,7 @@ package rgr.Messenger.Service;
 
 import rgr.Messenger.Entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import rgr.Messenger.Entity.Dialog;
 import rgr.Messenger.Entity.User;
@@ -45,7 +46,7 @@ public class MessengerService {
             s.add(u);
             s.add(user.get());
             Optional<Dialog> d = dr.findByUsersIn(s);
-            if(d.isPresent()) {
+            if (d.isPresent()) {
                 Dialog dg = d.get();
                 dg.addUser(u);
                 dr.save(dg);
@@ -103,8 +104,8 @@ public class MessengerService {
 
     public Map<String, Message> getMessagesOfDialog(User u, Long id) {
         Optional<Dialog> d = dr.findById(id);
-        if(d.isPresent()) {
-            if(d.get().getUsers().contains(u)) {
+        if (d.isPresent()) {
+            if (d.get().getUsers().contains(u)) {
                 Map<String, Message> map = new HashMap<>();
                 d.get().getMessages().forEach(el -> map.put(String.valueOf(el.getId()), el));
                 return map;
@@ -124,6 +125,7 @@ public class MessengerService {
             }
         }
     }
+
     public void createRoom(User u, String title) {
         Dialog d = new Dialog(u);
         d.setRoom(true);
@@ -133,17 +135,38 @@ public class MessengerService {
     }
 
 
-    public Set<Dialog> getAllRooms() {
-        return dr.findAllByIsRoom(true);
+    public Set<Dialog> getOpenedRooms() {
+        return dr.findAllByIsRoomAndIsClosed(true, false);
     }
+        public Set<Dialog> getRoomsOfUser (User u){
+            return dr.findAllByIsRoomAndUsers(true, u);
+        }
 
-    public Set<Dialog> getRoomsOfUser(User u) {
-        return dr.findAllByIsRoomAndUsers(true, u);
+        public Dialog getRoom (User u, Long id){
+            Optional<Dialog> d = dr.findById(id);
+            if (d.isPresent()) {
+                Dialog dg = d.get();
+                if (!dg.getUsers().contains(u)) {
+                    if (!dg.isDialogClosed()) {
+                        addUserToDialog(dg.getUsers().iterator().next(), u.getUsername(), id);
+                    } else {
+                        return null;
+                    }
+                }
+                return dg;
+            }
+            return null;
+        }
+
+
+        public void setRoomClosed (User u, Long id, String isClosed){
+            Optional<Dialog> d = dr.findById(id);
+            if (d.isPresent()) {
+                Dialog dg = d.get();
+                if (dg.getCreator().equals(u)) {
+                    dg.setClosed(isClosed.equals("True"));
+                    dr.save(dg);
+                }
+            }
+        }
     }
-
-    public Dialog getRoom(Long id) {
-        return dr.findById(id).orElseGet(null);
-    }
-
-
-}

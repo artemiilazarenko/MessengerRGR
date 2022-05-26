@@ -22,6 +22,7 @@ public class Dialog {
 
     private boolean isRoom;
 
+    private boolean isClosed;
 
     public Dialog() {
 
@@ -29,6 +30,7 @@ public class Dialog {
     }
     public Dialog(User u) {
         this.isRoom = false;
+        this.isClosed = false;
         this.creator = u;
         u.addCreatedDialogs(this);
 
@@ -103,6 +105,14 @@ public class Dialog {
 
     public void setRoom(boolean room) {
         isRoom = room;
+    }
+
+    public boolean isDialogClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(boolean closed) {
+        isClosed = closed;
     }
 
 }
