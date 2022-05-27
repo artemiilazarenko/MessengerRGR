@@ -107,7 +107,7 @@ public class Dialog {
         isRoom = room;
     }
 
-    public boolean isDialogClosed() {
+    public boolean isClosed() {
         return isClosed;
     }
 
