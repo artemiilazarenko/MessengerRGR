@@ -5,12 +5,12 @@
                 <form method="post" action="/dialogs/create">
                     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     <select name="id">
-                    <option selected disabled>Выберите друга</option>
+                    <option selected disabled><@spring.message code="dialogs.sel"/></option>
                         <#list friends as f>
                         <option name="id" value="${f.id}">${f.username}</option>
                         </#list>
                     </select>
-                    <input type="submit" value="Начать диалог">
+                    <input type="submit" value="<@spring.message code="dialogs.start"/>">
                 </form>
             <#else>
                 Для создания диалога добавьте друзей!
@@ -31,6 +31,6 @@
             </div>
         </#if>
         <#else>
-            Диалогов нет!
+            <@spring.message code="dialogs.empty"/>
     </#list>
 </@c.page>

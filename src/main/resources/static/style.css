@@ -6,6 +6,8 @@ body {
 
 header {
     background: #5d52ec;
+    display: flex;
+    justify-content: space-between;
 }
 
 ul {
