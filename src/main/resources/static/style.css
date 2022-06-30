@@ -5,7 +5,7 @@ body {
 }
 
 header {
-    background: #5d52ec;
+    background: #3667ac;
     display: flex;
     justify-content: space-between;
 }
@@ -32,7 +32,7 @@ a:visited {
 }
 
 a:hover {
-    background: #c3bfef;
+    background: white;
 }
 
 h3, h1 {
